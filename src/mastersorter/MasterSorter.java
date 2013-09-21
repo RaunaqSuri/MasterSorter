@@ -35,16 +35,21 @@ public class MasterSorter {
         //Asks user to input in the sort they wish to do
         System.out.println("Please enter the type of sort you wish to happen.");
         System.out.println("1. Enter 1 for insertion sort.");
+        System.out.println("2. Enter 2 for insertion sort.");
         System.out.println("Enter "+EXIT+" to exit the program");
         
         //User inputs in their choice
         int userChoice= input.nextInt();
         
         if(userChoice==0){
-            
+            //Program ends
         }else if(userChoice==1){
             insertionSort(numberHolder); 
             //Writes to a final file
+            System.out.println("The sorted file has been created. It is named \"sortedFile.txt\"");
+            writeFinalFile();
+        }else if(userChoice==2){
+            bubbleSort(numberHolder);
             System.out.println("The sorted file has been created. It is named \"sortedFile.txt\"");
             writeFinalFile();
         }
@@ -113,6 +118,29 @@ public class MasterSorter {
             arr[j]=key;
         }
         
+    }
+    private void bubbleSort(int[] arr){
+        //Does a bubble sort of an array
+        //It is not as efficient as insertion sort for a large list
+        //But then again, insertion sort isn't that efficient for large lists either
+        boolean isSwapped=true; //The flag is set to be initially true in order to complete the loop
+        int tempHolder; //Temporary holds a number
+                while(isSwapped){
+                    isSwapped=false; //Set to false in order to continue the sort
+                    /*The program cycles through the array and compares adjacent indices
+                     * If the values in the indices are not in ascending order
+                     * they are swapped.
+                     */
+                    for(int i=0; i<(arr.length-1); i++){
+                        if(arr[i]>arr[i+1]){
+                            tempHolder=arr[i+1];
+                            arr[i+1]=arr[i];
+                            arr[i]=tempHolder;
+                            isSwapped=true;
+                        }
+                        
+                    }
+                }
     }
 
     private void writeFinalFile() {
