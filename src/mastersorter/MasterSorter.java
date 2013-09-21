@@ -120,6 +120,9 @@ public class MasterSorter {
         
     }
     private void bubbleSort(int[] arr){
+        /**@param arr The array that needs to be sorted
+         * 
+         */
         //Does a bubble sort of an array
         //It is not as efficient as insertion sort for a large list
         //But then again, insertion sort isn't that efficient for large lists either
