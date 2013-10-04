@@ -35,26 +35,40 @@ public class MasterSorter {
         //Asks user to input in the sort they wish to do
         System.out.println("Please enter the type of sort you wish to happen.");
         System.out.println("1. Enter 1 for insertion sort.");
-        System.out.println("2. Enter 2 for insertion sort.");
+        System.out.println("2. Enter 2 for bubble sort.");
+        System.out.println("3. Enter 3 for quick sort.");
         System.out.println("Enter "+EXIT+" to exit the program");
         
         //User inputs in their choice
         int userChoice= input.nextInt();
+        boolean arraySorted = false;
         
-        if(userChoice==0){
-            //Program ends
-        }else if(userChoice==1){
-            insertionSort(numberHolder); 
-            //Writes to a final file
-            System.out.println("The sorted file has been created. It is named \"sortedFile.txt\"");
-            writeFinalFile();
-        }else if(userChoice==2){
-            bubbleSort(numberHolder);
-            System.out.println("The sorted file has been created. It is named \"sortedFile.txt\"");
-            writeFinalFile();
-        }
+        //Does the sort based on the user's choice
+        switch(userChoice){
+            
+            case 1: 
+                insertionSort(numberHolder); 
+                arraySorted = true;
+                break;
+                
+            case 2:
+                bubbleSort(numberHolder);
+                arraySorted = true;
+                break;
+                
+            case 3:
+                quickSort(0,numberHolder.length-1,numberHolder);
+                arraySorted = true;
+                break;
+            
+        } 
+        //If the array is sorted, then the final file is written
+        if(arraySorted){writeFinalFile();} 
+       
        
     }
+    
+    
     private void createFile(String fileName){
         int randNum;
         try{
@@ -145,7 +159,9 @@ public class MasterSorter {
                     }
                 }
     }
-
+    private void quickSort(int low, int high, int[]arr){
+      
+    }
     private void writeFinalFile() {
        //The following method prints the sorted array into a final file called "sortedFile.txt"
         try{
