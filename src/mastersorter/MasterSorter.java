@@ -37,6 +37,9 @@ public class MasterSorter {
         System.out.println("1. Enter 1 for insertion sort.");
         System.out.println("2. Enter 2 for bubble sort.");
         System.out.println("3. Enter 3 for quick sort.");
+        System.out.println("4. Enter 4 for selection sort.");
+        System.out.println("5. Enter 5 for merge sort.");
+        System.out.println("6. Enter 6 for shell sort.");
         System.out.println("Enter "+EXIT+" to exit the program");
         
         //User inputs in their choice
@@ -60,7 +63,18 @@ public class MasterSorter {
                 quickSort(0,numberHolder.length-1,numberHolder);
                 arraySorted = true;
                 break;
-            
+             case 4:
+            	selectionSort(numberHolder);
+            	arraySorted = true;
+            	break;
+            case 5:
+            	mergeSort(numberHolder);
+            	arraySorted = true;
+            	break;
+            case 6:
+            	shellSort(numberHolder);
+            	arraySorted = true;
+            	break;
         } 
         //If the array is sorted, then the final file is written
         if(arraySorted){writeFinalFile();} 
@@ -159,10 +173,8 @@ public class MasterSorter {
                     }
                 }
     }
-    private void quickSort(int low, int high, int[]arr){
-      
-    }
-    private void writeFinalFile() {
+    
+        private void writeFinalFile() {
        //The following method prints the sorted array into a final file called "sortedFile.txt"
         try{
             //Creates the file to be written in to
@@ -188,4 +200,103 @@ public class MasterSorter {
             System.err.println("Error: "+e.getMessage());
         }
     }
+    
+    private void quickSort(int[] arr){//randomly selects elements and places them to the left or right of the array depending on if its larger or smaller than the size that its being compared to
+    	int lenD = arr.length;
+    	int pivot = 0;
+    	int ind = lenD/2;//middle of the array (or near it in case of odd length)
+    	int i,j = 0,k = 0; //temporary integers, j is length of L array, k is length of R array
+    	if(lenD>=2){//if the size of the array is one, there is no point is sorting it
+    	  int[] L = new int[lenD];// two empty arrays half the size of the one being sorted
+    	  int[] R = new int[lenD];//Represents left and right arrays
+    	  int[] sorted = new int[lenD];
+    	  pivot = arr[ind];//value to be compared
+    	  for(i=0;i<lenD;i++){
+    	    if(i!=ind){
+    	      if(arr[i]<pivot){
+    	        L[j] = arr[i];//sets it equal to earlier in the array
+    	        j++;//keep track of L array
+    	      }
+    	      else{
+    	        R[k] = arr[i];//sets it equal to later in the array
+    	        k++;//keeps track of length of R array
+    	      }
+    	    }
+    	  }
+    	  int[] sortedL = new int[j];
+    	  int[] sortedR = new int[k];
+    	  System.arraycopy(L, 0, sortedL, 0, j);//transfers all elements from L to sortedL
+    	  System.arraycopy(R, 0, sortedR, 0, k);//transfers all elements from R to sortedR
+    	  quickSort(sortedL);//further quick sorts the left array
+    	  quickSort(sortedR);//further quick sorts the right array
+    	  System.arraycopy(sortedL, 0, sorted, 0, j);//first half of array added to sorted
+    	  sorted[j] = pivot;//middle value
+    	  System.arraycopy(sortedR, 0, sorted, j+1, k);//second half of array added to sorted
+    	  //essentially, the array arr[] is being reconstructed by having its values changed starting from both ends of the array to the middle
+    	  arr = sorted;//sets arr equal to sorted array
+    	}
+    }
+    
+    public void mergeSort(int[] arr){
+    	  int lenD = arr.length;
+    	  if(lenD>1){//array of size one does not need to be sorted
+    	    int[] sorted = new int[lenD];
+    	    int middle = lenD/2;
+    	    int rem = lenD-middle;
+    	    int[] L = new int[middle];
+    	    int[] R = new int[rem];
+    	    System.arraycopy(arr, 0, L, 0, middle);//sets array that is equal to left half of array that is being sorted
+    	    System.arraycopy(arr, middle, R, 0, rem);//sets array that is equal to right half of array that is being sorted
+    	    this.mergeSort(L);//sorts each array separately (can be done using any other sorting method as well)
+    	    this.mergeSort(R);
+    	    sorted = merge(L, R);//combines left and right array
+    	    sorted = arr;//sets array that is sorted to array that user will work with
+    	  }
+    	}
+    	 
+    	public int[] merge(int[] L, int[] R){
+    	  int lenL = L.length;
+    	  int lenR = R.length;
+    	  int[] merged = new int[lenL+lenR];
+    	  int i = 0;
+    	  int j = 0;
+    	  while(i<lenL||j<lenR){
+    	    if(i<lenL & j<lenR){
+    	      if(L[i]<=R[j]){
+    	        merged[i+j] = L[i];
+    	        i++;//starts sorting from the left of the array
+    	      }
+    	      else{
+    	        merged[i+j] = R[j];
+    	        j++;//starts sorting from the right of the array
+    	      }
+    	    }
+    	    else if(i<lenL){
+    	      merged[i+j] = L[i];//in case of right side being sorted before left side
+    	      i++;
+    	    }
+    	    else if(j<lenR){
+    	      merged[i+j] = R[j];//in case of left side being sorted before right side
+    	      j++;
+    	     }
+    	   }
+    	   return merged;
+    	}
+    
+    public void shellSort(int[] arr){//basically its a better, more generalised version of insertions sort
+    		int lenD = arr.length;
+    		int inc = lenD/2;//set in the middle of the array
+    		while(inc>0){
+    			for(int i=inc;i<lenD;i++){//loops from mid to end
+    				int tmp = arr[i];//temporary
+    		        int j = i;
+    		        	while(j>=inc && arr[j-inc]>tmp){//Comparison
+    		        		arr[j] = arr[j-inc];
+    		        		j = j-inc;
+    		        	}
+    		        arr[j] = tmp;//swapped
+    		    }
+    		inc = (inc /2);//set back from original position
+    		}
+    	}
 }
